@@ -1,0 +1,29 @@
+{
+    "name": "beli-barang-aussie",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "nodemon app.js",
+        "test": "test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/sofianso/beli-barang-aussie.git"
+    },
+    "author": "Sofian So",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/sofianso/beli-barang-aussie/issues"
+    },
+    "homepage": "https://github.com/sofianso/beli-barang-aussie#readme",
+    "dependencies": {
+        "body-parser": "^1.20.0",
+        "express": "^4.18.1",
+        "express-graphql": "^0.12.0",
+        "graphql": "^15.8.0"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.19"
+    }
+}
