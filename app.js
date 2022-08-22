@@ -3,14 +3,13 @@ const bodyParser = require("body-parser");
 const graphqlHTTP = require("express-graphql").graphqlHTTP;
 const { buildSchema } = require("graphql");
 const mongoose = require("mongoose");
-const Order = require("./models/orders");
+const bcrypt = require("bcryptjs");
+const Order = require("./models/order");
+const User = require("./models/user");
 
 const app = express();
 
 app.use(bodyParser.json());
-
-// the array stores the data in memory for testing purposes
-const orders = [];
 
 app.use(
     "/graphql",
@@ -23,11 +22,24 @@ app.use(
             orderTotal: Float!
             dateOrdered: String!
         }
+        type User{
+            _id: ID!
+            email: String!
+            password: String
+            firstName: String!
+            lastName: String!
+        }
         input OrderInput{
             orderNumber: String
             orderStatus: String
             orderTotal: Float!
             dateOrdered: String!
+        }
+        input UserInput{
+            email: String!
+            password: String!
+            firstName: String!
+            lastName: String!
         }
         
         type RootQuery {
@@ -35,6 +47,7 @@ app.use(
         }
         type RootMutation {
             createOrder(orderInput: OrderInput): Order
+            createUser(userInput: UserInput): User
         }
         schema{
             query: RootQuery
@@ -62,23 +75,58 @@ app.use(
                     orderStatus: args.orderInput.orderStatus,
                     orderTotal: args.orderInput.orderTotal,
                     dateOrdered: new Date(args.orderInput.dateOrdered),
+                    user: "63038eb417239296eeb02cd5",
                 });
                 console.log(order);
                 // order.save() is a mongoose method that saves the order to the database
                 // adding return tells the function to wait and return (async) the order that was saved to the database
+                let createdOrder;
                 return order
                     .save()
                     .then((result) => {
-                        console.log(result);
-                        return {...result._doc, _id: order.id };
-                        // return {...result._doc, _id: order._doc._id.toString() };
-                        // return result;
+                        createdOrder = {...result._doc, _id: result._doc._id.toString() };
+                        // console.log(createdOrder);
+                        return User.findById("63038eb417239296eeb02cd5");
+                    })
+                    .then((user) => {
+                        if (!user) {
+                            throw new Error("User not found");
+                        }
+                        user.createdOrders.push(order);
+                        return user.save();
+                    })
+                    .then((result) => {
+                        return createdOrder;
                     })
                     .catch((err) => {
                         console.log(err);
                         throw err;
                     });
-                return order;
+            },
+            createUser: (args) => {
+                return User.findOne({ email: args.userInput.email })
+                    .then((user) => {
+                        if (user) {
+                            throw new Error("User already exists");
+                        }
+                        return bcrypt.hash(args.userInput.password, 12);
+                    })
+                    .then((hashedPassword) => {
+                        const user = new User({
+                            email: args.userInput.email,
+                            password: hashedPassword,
+                            firstName: args.userInput.firstName,
+                            lastName: args.userInput.lastName,
+                        });
+                        return user.save();
+                    })
+                    .then((result) => {
+                        // By setting the password as null, it guarantees that no one can access the password
+                        return {...result._doc, password: null, _id: result.id };
+                    })
+                    .catch((err) => {
+                        throw err;
+                    });
             },
         },
         graphiql: true,
