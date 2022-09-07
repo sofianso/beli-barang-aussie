@@ -16,14 +16,10 @@ const orderSchema = new Schema({
         type: Number,
         required: true,
     },
-    dateOrdered: {
-        type: Date,
-        required: true,
-    },
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",
     },
 });
 
-module.exports = mongoose.model("Order", orderSchema);
+module.exports = mongoose.model("Orders", orderSchema);
