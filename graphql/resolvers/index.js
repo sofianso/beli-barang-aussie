@@ -80,8 +80,13 @@ module.exports = {
             if (!creator) {
                 throw new Error("User not found");
             }
-            creator.createdOrders.push(order);
-            await creator.save();
+            console.log("created orders", creator.createdOrders);
+            if (creator.createdOrders) {
+                creator.createdOrders.push(order);
+                await creator.save();
+            }
+            console.log("after created orders", creator.createdOrders);
+
 
             return createdOrder;
         } catch (err) {
