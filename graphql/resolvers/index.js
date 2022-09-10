@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const Order = require("../../models/order");
+const Product = require("../../models/product");
 const User = require("../../models/user");
 
 const orders = async(orderIds) => {
@@ -47,6 +48,7 @@ module.exports = {
                     orderNumber: order.orderNumber,
                     orderStatus: order.orderStatus,
                     orderTotal: order.orderTotal,
+                    products: product.bind(this, order._doc.products),
                     creator: user.bind(this, order._doc.creator),
                 };
             });
@@ -86,7 +88,6 @@ module.exports = {
                 await creator.save();
             }
             console.log("after created orders", creator.createdOrders);
-
 
             return createdOrder;
         } catch (err) {

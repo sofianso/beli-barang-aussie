@@ -20,6 +20,10 @@ const orderSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     },
+    products: {
+        type: Schema.Types.ObjectId,
+        ref: "Products",
+    },
 });
 
 module.exports = mongoose.model("Orders", orderSchema);
