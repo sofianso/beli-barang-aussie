@@ -15,6 +15,22 @@ const productSchema = new Schema({
     productImage: {
         type: String,
     },
+    onSale: {
+        type: Boolean,
+        required: true,
+    },
+    outOfStock: {
+        type: Boolean,
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        required: true,
+    },
+    updatedAt: {
+        type: Date,
+        required: true,
+    },
 });
 
-module.exports = mongoose.model("Products", productSchema);
+module.exports = mongoose.model("Product", productSchema);

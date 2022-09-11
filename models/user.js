@@ -22,7 +22,7 @@ const userSchema = new Schema({
     },
     // A user can have many orders
     // ref is an internal function that mongoose uses to reference the model
-    orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
+    order: { type: Schema.Types.ObjectId, ref: "Order" },
 });
 
 module.exports = mongoose.model("User", userSchema);
