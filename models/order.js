@@ -24,6 +24,6 @@ const orderSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Product",
     },
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("Order", orderSchema);

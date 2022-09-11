@@ -32,14 +32,15 @@ input OrderInput{
     orderTotal: Float!
 }
 input ProductInput{
+    productBrand: String!
     productName: String!
     productDescription: String!
     productPrice: Float!
     productQuantity: Int!
     onSale: Boolean!
     outOfStock: Boolean!
-    createdAt: String
-    updatedAt: String
+    createdAt: String!
+    updatedAt: String!
 }
 
 input UserInput{
